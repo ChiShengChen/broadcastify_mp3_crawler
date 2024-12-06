@@ -13,3 +13,4 @@ The Broadcastify account need to upgrade to Premium level ($15 for 180 days) fir
 - [ ] Download All Mp3 files in defined date range in random range of months
 - [ ] Add folder by date
 - [ ] Packaging and parameterized
+- [ ] Stop sign when the day is not finish
