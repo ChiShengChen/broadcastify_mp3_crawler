@@ -12,9 +12,9 @@ from datetime import datetime, timedelta
 
 # Configuration
 LOGIN_URL = "https://www.broadcastify.com/login"
-ARCHIVE_URL = "https://www.broadcastify.com/archives/feed/14744"
-USERNAME = "m50816"
-PASSWORD = "m299792458"
+ARCHIVE_URL = "https://www.broadcastify.com/archives/feed/14744" #YOUR CH
+USERNAME = "YOUR_ACCOUNT"
+PASSWORD = "YOUR_PW"
 DOWNLOAD_FOLDER = "/media/meow/Elements/ems_call/data/data_2024all_n3"
 
 # Ensure the download folder exists
@@ -37,8 +37,8 @@ wait = WebDriverWait(driver, 10)
 def get_cookies_from_selenium(driver):
     """Get cookies from Selenium and return as a dict suitable for requests."""
     selenium_cookies = driver.get_cookies()
-    # ³oÃä¦^¶Ç name: value ªº¹ïÀ³¦r¨å¸ûÂ²³æ¡A¦ı requests »İ­ndomain¸ê°T
-    # «á­±·|¥Î¥t¤@ºØ¤èªk±Ncookieª`¤J¨ìsession¤¤
+    # é€™é‚Šå›å‚³ name: value çš„å°æ‡‰å­—å…¸è¼ƒç°¡å–®ï¼Œä½† requests éœ€è¦domainè³‡è¨Š
+    # å¾Œé¢æœƒç”¨å¦ä¸€ç¨®æ–¹æ³•å°‡cookieæ³¨å…¥åˆ°sessionä¸­
     cookies = {cookie['name']: cookie['value'] for cookie in selenium_cookies}
     return cookies
 
@@ -109,11 +109,11 @@ try:
     session = requests.Session()
     session.headers.update({
         "User-Agent": user_agent,
-        # ¦pªG»İ­nReferer©Î¨ä¥Lheader¤]¦b¦¹¥[¤J
+        # å¦‚æœéœ€è¦Refereræˆ–å…¶ä»–headerä¹Ÿåœ¨æ­¤åŠ å…¥
         "Referer": ARCHIVE_URL
     })
 
-    # ±NSeleniumªºcookies¶ë¤Jrequests session
+    # å°‡Seleniumçš„cookieså¡å…¥requests session
     for cookie in driver.get_cookies():
         session.cookies.set(cookie['name'], cookie['value'], domain=cookie['domain'])
 
@@ -146,7 +146,7 @@ try:
         element_this_round = str(element.text)
         print("***element_this_round***is ", element_this_round)
 
-        # ¹M¾ú¤é´Áªí®æ
+        # éæ­·æ—¥æœŸè¡¨æ ¼
         for k in range(1, 7):
             for y in range(1,8):
                 button_xpath = f"/html/body/main/div/div/div[2]/div/div[2]/div/div[1]/div/div/div[1]/table/tbody/tr[{k}]/td[{y}]"
@@ -179,7 +179,7 @@ try:
                                 new_url = driver.current_url
                                 print(f"Redirected to new URL: {new_url}")
 
-                                # ¨Ï¥Îsession¤U¸ü½T«Ocookies»Puser-agent¤@­P
+                                # ä½¿ç”¨sessionä¸‹è¼‰ç¢ºä¿cookiesèˆ‡user-agentä¸€è‡´
                                 response = session.get(mp3_url, stream=True, allow_redirects=True)
 
                                 final_url = response.url
