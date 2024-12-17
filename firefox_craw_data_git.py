@@ -13,8 +13,8 @@ from datetime import datetime, timedelta
 # Configuration
 LOGIN_URL = "https://www.broadcastify.com/login"
 ARCHIVE_URL = "https://www.broadcastify.com/archives/feed/14744"
-USERNAME = "YOUR_ACCOUNT"
-PASSWORD = "YOUR_PW"
+USERNAME = "m50816"
+PASSWORD = "m299792458"
 DOWNLOAD_FOLDER = "/media/meow/Elements/ems_call/data/data_2024all_n3"
 
 # Ensure the download folder exists
@@ -37,7 +37,8 @@ wait = WebDriverWait(driver, 10)
 def get_cookies_from_selenium(driver):
     """Get cookies from Selenium and return as a dict suitable for requests."""
     selenium_cookies = driver.get_cookies()
-    # insert coolie into session
+    # 這邊回傳 name: value 的對應字典較簡單，但 requests 需要domain資訊
+    # 後面會用另一種方法將cookie注入到session中
     cookies = {cookie['name']: cookie['value'] for cookie in selenium_cookies}
     return cookies
 
@@ -108,11 +109,11 @@ try:
     session = requests.Session()
     session.headers.update({
         "User-Agent": user_agent,
-        
+        # 如果需要Referer或其他header也在此加入
         "Referer": ARCHIVE_URL
     })
 
-    # Selenium cookies insert into requests session
+    # 將Selenium的cookies塞入requests session
     for cookie in driver.get_cookies():
         session.cookies.set(cookie['name'], cookie['value'], domain=cookie['domain'])
 
@@ -145,7 +146,7 @@ try:
         element_this_round = str(element.text)
         print("***element_this_round***is ", element_this_round)
 
-        # look through all  date form
+        # 遍歷日期表格
         for k in range(1, 7):
             for y in range(1,8):
                 button_xpath = f"/html/body/main/div/div/div[2]/div/div[2]/div/div[1]/div/div/div[1]/table/tbody/tr[{k}]/td[{y}]"
@@ -178,7 +179,7 @@ try:
                                 new_url = driver.current_url
                                 print(f"Redirected to new URL: {new_url}")
 
-                                # use session to align cookies and user-agent
+                                # 使用session下載確保cookies與user-agent一致
                                 response = session.get(mp3_url, stream=True, allow_redirects=True)
 
                                 final_url = response.url
